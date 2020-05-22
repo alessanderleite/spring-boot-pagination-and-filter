@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "tutorials")
@@ -14,9 +15,11 @@ public class Tutorial {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
+	@NotBlank
 	@Column(name = "title")
 	private String title;
-	
+
+	@NotBlank
 	@Column(name = "description")
 	private String description;
 	
