@@ -67,6 +67,33 @@ public class TutorialController {
 		}
 	}
 	
+	@GetMapping("/tutorials/published")
+	public ResponseEntity<Map<String, Object>> findByPublished(
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "3") int size) {
+		try {
+			List<Tutorial> tutorials = new ArrayList<>();
+			Pageable paging = PageRequest.of(page, size);
+			
+			Page<Tutorial> pageTutorials = tutorialRepository.findByPublished(true, paging);
+			tutorials = pageTutorials.getContent();
+			
+			if (tutorials.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			
+			Map<String, Object> response = new HashMap<>();
+			response.put("tutorials", tutorials);
+			response.put("currentPage", pageTutorials.getNumber());
+			response.put("totalItems", pageTutorials.getTotalElements());
+			response.put("totalPages", pageTutorials.getTotalPages());
+			
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
 	@PostMapping("/tutorials")
 	public ResponseEntity<Tutorial> createTutorial(@Valid @RequestBody Tutorial tutorial) {
 		 try {
